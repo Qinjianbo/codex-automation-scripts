@@ -25,18 +25,18 @@ fi
 GIT_STATUS=$(git status --porcelain || true)
 
 PROMPT=$(cat <<EOF
-You are maintaining RiskMeter. Generate a concise task list for today.
+You are maintaining $PROJECT_NAME. Generate a concise task list for today.
 Requirements:
 - Output ONLY Markdown that starts with "# Tasks (Auto-generated)"
 - Include "## $DATE_STR"
 - Provide 4-6 checkbox items
-- Prioritize unfinished tasks from the existing TASKS.md and PLAN.md
+- Prioritize unfinished tasks from the existing $TASKS_FILE and $PLAN_FILE
 - Keep tasks small, specific, and actionable
 
-Current PLAN.md:
+Current $PLAN_FILE:
 $PLAN_CONTENT
 
-Existing TASKS.md:
+Existing $TASKS_FILE:
 $TASKS_CONTENT
 
 Git status (if any):

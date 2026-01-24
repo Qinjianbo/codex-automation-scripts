@@ -8,7 +8,7 @@
 ## 配置
 - 在目标仓库根目录创建 `config.yaml`，或在 `scripts/config.yaml` 创建。
 - 可基于 `scripts/config.example.yaml` 复制修改。
-- 关键字段：`codex_node`、`codex_cli`、`git_branch`、`git_remote`、`tasks_file`、`plan_file`。
+- 关键字段：`project_name`、`codex_node`、`codex_cli`、`git_branch`、`git_remote`、`tasks_file`、`plan_file`。
 
 ## 使用方式
 你可以用两种常见方式集成这些脚本：直接克隆到项目，或作为 Git submodule 引入。
@@ -35,6 +35,7 @@ cp scripts/config.example.yaml config.yaml
 5) 从目标仓库根目录运行脚本：
 
 ```bash
+scripts/auto-plan.sh --codex
 scripts/auto-iterate.sh --codex
 scripts/auto-exec.sh
 scripts/auto-commit.sh
@@ -65,6 +66,7 @@ cp scripts/config.example.yaml config.yaml
 5) 从目标仓库根目录运行脚本：
 
 ```bash
+scripts/auto-plan.sh --codex
 scripts/auto-iterate.sh --codex
 scripts/auto-exec.sh
 scripts/auto-commit.sh
@@ -73,6 +75,9 @@ scripts/auto-run.sh
 ```
 
 ## 核心脚本
+
+- `auto-plan.sh --codex`
+  基于当前上下文（已有计划/任务与 git 状态）更新 `PLAN.md`。
 
 - `codex-run.sh`
   封装运行 Codex CLI（非 TUI 模式），使用配置中的 Node/Codex 路径。  
@@ -91,7 +96,7 @@ scripts/auto-run.sh
 
 - `auto-run.sh`
   串联 `auto-iterate` → `auto-exec` → `auto-commit`。  
-  参数：`--dry-run`、`--allow-dirty`、`--full-auto`、`--skip-commit`。
+  参数：`--dry-run`、`--allow-dirty`、`--full-auto`、`--skip-plan`、`--skip-commit`。
 
 ## 锁机制
 `auto-exec.sh` 会写入锁文件（默认：`.auto-exec.lock`）以防并发运行。

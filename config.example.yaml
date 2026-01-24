@@ -1,5 +1,7 @@
 # Example automation configuration
 
+project_name: ExampleProject
+
 codex_node: ~/.nvm/versions/node/v22.18.0/bin/node
 codex_cli: ~/.nvm/versions/node/v22.18.0/lib/node_modules/@openai/codex/bin/codex.js
 

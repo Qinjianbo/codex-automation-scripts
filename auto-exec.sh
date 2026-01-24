@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Run Codex to implement tasks from TASKS.md.
+# Run Codex to implement tasks from TASKS_FILE.
 # Usage:
 #   scripts/auto-exec.sh                # requires clean git status
 #   scripts/auto-exec.sh --allow-dirty  # allow dirty working tree
@@ -41,7 +41,7 @@ done
 cd "$ROOT_DIR"
 
 if [[ ! -f "$TASKS_FILE" ]]; then
-  echo "Missing TASKS.md. Run scripts/auto-iterate.sh --codex first." >&2
+  echo "Missing tasks file: $TASKS_FILE. Run scripts/auto-iterate.sh --codex first." >&2
   exit 1
 fi
 
@@ -68,8 +68,8 @@ fi
 
 TASKS_CONTENT="$(cat "$TASKS_FILE")"
 
-PROMPT=$(cat <<'EOF'
-You are a coding agent working inside this repo. Implement the unchecked tasks from TASKS.md.
+PROMPT=$(cat <<EOF
+You are a coding agent working inside this repo. Implement the unchecked tasks from $TASKS_FILE.
 
 Rules:
 - Make small, safe changes only; avoid refactors.
@@ -77,7 +77,7 @@ Rules:
 - Prefer editing existing files; avoid new dependencies.
 - Update CHANGELOG.md if user-visible behavior changes.
 - Report what you changed and any manual checks.
-- After completing tasks, update TASKS.md by checking off items you completed.
+- After completing tasks, update $TASKS_FILE by checking off items you completed.
 
 If --dry-run is enabled, produce a plan only and do not edit files.
 EOF
@@ -87,7 +87,7 @@ if [[ "$DRY_RUN" == "true" ]]; then
   PROMPT="${PROMPT}"$'\n\nDRY RUN: Provide a concise plan only. Do not edit files.'
 fi
 
-PROMPT="${PROMPT}"$'\n\nTASKS.md:\n'"$TASKS_CONTENT"
+PROMPT="${PROMPT}"$'\n\n'"$TASKS_FILE"$':\n'"$TASKS_CONTENT"
 
 if [[ "$FULL_AUTO" == "true" ]]; then
   scripts/codex-run.sh --dangerously-bypass-approvals-and-sandbox exec "$PROMPT"

@@ -8,7 +8,7 @@ All scripts are plain Bash and work from the repo root.
 ## Configuration
 - Create a project‑specific config at `config.yaml` (repo root), or at `scripts/config.yaml`.
 - Use `scripts/config.example.yaml` as a template.
-- Key fields: `codex_node`, `codex_cli`, `git_branch`, `git_remote`, `tasks_file`, `plan_file`.
+- Key fields: `project_name`, `codex_node`, `codex_cli`, `git_branch`, `git_remote`, `tasks_file`, `plan_file`.
 
 ## Usage
 You can use these scripts in two common ways: clone into your target repo, or add as a Git submodule.
@@ -35,6 +35,7 @@ cp scripts/config.example.yaml config.yaml
 5) Run scripts from the target repo root:
 
 ```bash
+scripts/auto-plan.sh --codex
 scripts/auto-iterate.sh --codex
 scripts/auto-exec.sh
 scripts/auto-commit.sh
@@ -65,6 +66,7 @@ cp scripts/config.example.yaml config.yaml
 5) Run scripts from the target repo root:
 
 ```bash
+scripts/auto-plan.sh --codex
 scripts/auto-iterate.sh --codex
 scripts/auto-exec.sh
 scripts/auto-commit.sh
@@ -73,6 +75,9 @@ scripts/auto-run.sh
 ```
 
 ## Core Scripts
+
+- `auto-plan.sh --codex`  
+  Updates `PLAN.md` using Codex based on current context (existing plan/tasks and git status).
 
 - `codex-run.sh`  
   Wrapper to run Codex CLI in non‑TUI mode with the configured Node/Codex paths.  
@@ -91,7 +96,7 @@ scripts/auto-run.sh
 
 - `auto-run.sh`  
   Orchestrates `auto-iterate` → `auto-exec` → `auto-commit`.  
-  Flags: `--dry-run`, `--allow-dirty`, `--full-auto`, `--skip-commit`.
+  Flags: `--dry-run`, `--allow-dirty`, `--full-auto`, `--skip-plan`, `--skip-commit`.
 
 ## Locking
 `auto-exec.sh` writes a lock file (default: `.auto-exec.lock`) to prevent concurrent runs.

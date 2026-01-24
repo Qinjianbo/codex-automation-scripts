@@ -39,7 +39,7 @@ else
 fi
 
 PROMPT=$(cat <<EOF
-You are in the RiskMeter repo on branch main.
+You are in the $PROJECT_NAME repo on branch $GIT_BRANCH.
 Stage all changes, create a commit, and push to ${GIT_REMOTE}/${GIT_BRANCH}.
 
 Rules:

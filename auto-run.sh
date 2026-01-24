@@ -7,6 +7,7 @@ set -euo pipefail
 #   scripts/auto-run.sh --allow-dirty
 #   scripts/auto-run.sh --dry-run
 #   scripts/auto-run.sh --full-auto
+#   scripts/auto-run.sh --skip-plan
 #   scripts/auto-run.sh --skip-commit
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -17,6 +18,7 @@ cd "$ROOT_DIR"
 ALLOW_DIRTY="false"
 DRY_RUN="false"
 FULL_AUTO="false"
+SKIP_PLAN="false"
 SKIP_COMMIT="false"
 
 for arg in "$@"; do
@@ -24,15 +26,23 @@ for arg in "$@"; do
     --allow-dirty) ALLOW_DIRTY="true" ;;
     --dry-run) DRY_RUN="true" ;;
     --full-auto) FULL_AUTO="true" ;;
+    --skip-plan) SKIP_PLAN="true" ;;
     --skip-commit) SKIP_COMMIT="true" ;;
     *) echo "Unknown option: $arg" >&2; exit 1 ;;
   esac
 done
 
-echo "[1/3] Generate TASKS.md via Codex..."
+if [[ "$SKIP_PLAN" == "false" ]]; then
+  echo "[1/4] Update PLAN.md via Codex..."
+  scripts/auto-plan.sh --codex
+else
+  echo "[1/4] Plan update skipped."
+fi
+
+echo "[2/4] Generate TASKS.md via Codex..."
 scripts/auto-iterate.sh --codex
 
-echo "[2/3] Execute tasks via Codex..."
+echo "[3/4] Execute tasks via Codex..."
 EXEC_ARGS=""
 if [[ "$ALLOW_DIRTY" == "true" ]]; then
   EXEC_ARGS+=" --allow-dirty"
@@ -51,9 +61,9 @@ else
 fi
 
 if [[ "$DRY_RUN" == "true" || "$SKIP_COMMIT" == "true" ]]; then
-  echo "[3/3] Commit skipped."
+  echo "[4/4] Commit skipped."
   exit 0
 fi
 
-echo "[3/3] Commit and push via Codex..."
+echo "[4/4] Commit and push via Codex..."
 scripts/auto-commit.sh

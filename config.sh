@@ -31,6 +31,7 @@ _resolve_path() {
 
 load_config() {
   # Defaults
+  PROJECT_NAME="${PROJECT_NAME:-$(basename "$ROOT_DIR")}"
   CODEX_NODE="${CODEX_NODE:-$HOME/.nvm/versions/node/v22.18.0/bin/node}"
   CODEX_CLI="${CODEX_CLI:-$HOME/.nvm/versions/node/v22.18.0/lib/node_modules/@openai/codex/bin/codex.js}"
   GIT_BRANCH="${GIT_BRANCH:-main}"
@@ -64,6 +65,7 @@ load_config() {
       case "$key" in
         codex_node) CODEX_NODE="$val" ;;
         codex_cli) CODEX_CLI="$val" ;;
+        project_name) PROJECT_NAME="$val" ;;
         git_branch) GIT_BRANCH="$val" ;;
         git_remote) GIT_REMOTE="$val" ;;
         tasks_file) TASKS_FILE="$val" ;;
