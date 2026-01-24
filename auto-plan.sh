@@ -5,8 +5,8 @@ set -euo pipefail
 # Usage:
 #   scripts/auto-plan.sh --codex
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$ROOT_DIR/scripts/config.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/config.sh"
 load_config
 DATE_STR="$(date +%Y-%m-%d)"
 

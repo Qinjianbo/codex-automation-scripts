@@ -3,8 +3,8 @@ set -euo pipefail
 
 # Wrapper to run Codex CLI non-TUI reliably with the bundled Node version.
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$ROOT_DIR/scripts/config.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/config.sh"
 load_config
 
 if [[ ! -x "$CODEX_NODE" ]]; then

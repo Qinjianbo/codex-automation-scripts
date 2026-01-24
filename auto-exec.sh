@@ -10,8 +10,8 @@ set -euo pipefail
 #   scripts/auto-exec.sh --full-auto      # no prompts; bypass approvals/sandbox (dangerous)
 #   scripts/auto-exec.sh --force-lock     # ignore existing lock file
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$ROOT_DIR/scripts/config.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/config.sh"
 load_config
 
 ALLOW_DIRTY="false"
