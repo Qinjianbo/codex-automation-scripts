@@ -3,9 +3,17 @@ set -euo pipefail
 
 # Lightweight config loader for scripts.
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-superproject-working-tree 2>/dev/null || true)"
+if [[ -z "$ROOT_DIR" ]]; then
+  ROOT_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || true)"
+fi
+if [[ -z "$ROOT_DIR" ]]; then
+  ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+fi
+
 CONFIG_FILE="$ROOT_DIR/config.yaml"
-ALT_CONFIG_FILE="$ROOT_DIR/scripts/config.yaml"
+ALT_CONFIG_FILE="$SCRIPT_DIR/config.yaml"
 
 _expand_tilde() {
   local val="$1"
