@@ -60,6 +60,8 @@ load_config() {
   PLAN_FILE="${PLAN_FILE:-$ROOT_DIR/PLAN.md}"
   LOG_FILE="${LOG_FILE:-$ROOT_DIR/ITERATION_LOG.md}"
   LOCK_FILE="${LOCK_FILE:-$ROOT_DIR/.auto-run.lock}"
+  PLAN_CONTEXT_FILES="${PLAN_CONTEXT_FILES:-README.md,ROADMAP.md,CHANGELOG.md}"
+  PLAN_CONTEXT_MAX_CHARS="${PLAN_CONTEXT_MAX_CHARS:-12000}"
   DEFAULT_SANDBOX="${DEFAULT_SANDBOX:-workspace-write}"
 
   local config_to_use=""
@@ -92,6 +94,8 @@ load_config() {
         plan_file) PLAN_FILE="$val" ;;
         log_file) LOG_FILE="$val" ;;
         lock_file) LOCK_FILE="$val" ;;
+        plan_context_files) PLAN_CONTEXT_FILES="$val" ;;
+        plan_context_max_chars) PLAN_CONTEXT_MAX_CHARS="$val" ;;
         default_sandbox) DEFAULT_SANDBOX="$val" ;;
       esac
     done < <(grep -v '^[[:space:]]*$' "$config_to_use" | grep -v '^[[:space:]]*#')
