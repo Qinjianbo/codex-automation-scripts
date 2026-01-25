@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Generate TASKS.md via Codex CLI only.
+# Generate tasks file via Codex CLI only.
 # Usage:
-#   scripts/auto-iterate.sh --codex
+#   auto-iterate.sh --codex
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
@@ -13,7 +13,7 @@ DATE_STR="$(date +%Y-%m-%d)"
 cd "$ROOT_DIR"
 
 if [[ "${1:-}" != "--codex" ]]; then
-  echo "Usage: scripts/auto-iterate.sh --codex" >&2
+  echo "Usage: auto-iterate.sh --codex" >&2
   exit 1
 fi
 
@@ -48,7 +48,7 @@ TMP_OUT="$(mktemp)"
 "$SCRIPT_DIR/codex-run.sh" exec "$PROMPT" > "$TMP_OUT"
 
 if ! head -n 1 "$TMP_OUT" | grep -q "# Tasks (Auto-generated)"; then
-  echo "Codex output did not start with the expected header. TASKS.md not updated." >&2
+  echo "Codex output did not start with the expected header. $(basename "$TASKS_FILE") not updated." >&2
   cat "$TMP_OUT" >&2
   rm -f "$TMP_OUT"
   exit 1
@@ -66,7 +66,7 @@ EOF
 
 cat >> "$LOG_FILE" <<EOF
 ## $DATE_STR
-- Generated TASKS.md via Codex.
+- Generated $(basename "$TASKS_FILE") via Codex.
 EOF
 
 echo "Updated: $TASKS_FILE"

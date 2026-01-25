@@ -3,12 +3,12 @@ set -euo pipefail
 
 # Orchestrate: generate tasks -> execute tasks -> commit & push
 # Usage:
-#   scripts/auto-run.sh
-#   scripts/auto-run.sh --allow-dirty
-#   scripts/auto-run.sh --dry-run
-#   scripts/auto-run.sh --full-auto
-#   scripts/auto-run.sh --skip-plan
-#   scripts/auto-run.sh --skip-commit
+#   auto-run.sh
+#   auto-run.sh --allow-dirty
+#   auto-run.sh --dry-run
+#   auto-run.sh --full-auto
+#   auto-run.sh --skip-plan
+#   auto-run.sh --skip-commit
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
@@ -33,14 +33,14 @@ for arg in "$@"; do
 done
 
 if [[ "$SKIP_PLAN" == "false" ]]; then
-  echo "[1/4] Update PLAN.md via Codex..."
-  scripts/auto-plan.sh --codex
+  echo "[1/4] Update $(basename "$PLAN_FILE") via Codex..."
+  "$SCRIPT_DIR/auto-plan.sh" --codex
 else
   echo "[1/4] Plan update skipped."
 fi
 
-echo "[2/4] Generate TASKS.md via Codex..."
-scripts/auto-iterate.sh --codex
+echo "[2/4] Generate $(basename "$TASKS_FILE") via Codex..."
+"$SCRIPT_DIR/auto-iterate.sh" --codex
 
 echo "[3/4] Execute tasks via Codex..."
 EXEC_ARGS=""
@@ -54,10 +54,10 @@ if [[ "$FULL_AUTO" == "true" ]]; then
   EXEC_ARGS+=" --full-auto"
 fi
 if [[ -z "$EXEC_ARGS" ]]; then
-  scripts/auto-exec.sh
+  "$SCRIPT_DIR/auto-exec.sh"
 else
   # shellcheck disable=SC2086
-  scripts/auto-exec.sh $EXEC_ARGS
+  "$SCRIPT_DIR/auto-exec.sh" $EXEC_ARGS
 fi
 
 if [[ "$DRY_RUN" == "true" || "$SKIP_COMMIT" == "true" ]]; then
@@ -66,4 +66,4 @@ if [[ "$DRY_RUN" == "true" || "$SKIP_COMMIT" == "true" ]]; then
 fi
 
 echo "[4/4] Commit and push via Codex..."
-scripts/auto-commit.sh
+"$SCRIPT_DIR/auto-commit.sh"

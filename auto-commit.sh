@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Auto-commit and push changes to origin/main via Codex CLI.
+# Auto-commit and push changes via Codex CLI.
 # Usage:
-#   scripts/auto-commit.sh
-#   scripts/auto-commit.sh -m "your message"
+#   auto-commit.sh
+#   auto-commit.sh -m "your message"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
@@ -15,7 +15,7 @@ COMMIT_MSG=""
 while getopts ":m:" opt; do
   case "$opt" in
     m) COMMIT_MSG="$OPTARG" ;;
-    *) echo "Usage: scripts/auto-commit.sh [-m \"message\"]" >&2; exit 1 ;;
+    *) echo "Usage: auto-commit.sh [-m \"message\"]" >&2; exit 1 ;;
   esac
 done
 

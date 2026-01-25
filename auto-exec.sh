@@ -3,12 +3,12 @@ set -euo pipefail
 
 # Run Codex to implement tasks from TASKS_FILE.
 # Usage:
-#   scripts/auto-exec.sh                # requires clean git status
-#   scripts/auto-exec.sh --allow-dirty  # allow dirty working tree
-#   scripts/auto-exec.sh --dry-run      # ask Codex to only propose a plan (no edits)
-#   scripts/auto-exec.sh --sandbox <mode>  # set codex sandbox (default: workspace-write)
-#   scripts/auto-exec.sh --full-auto      # no prompts; bypass approvals/sandbox (dangerous)
-#   scripts/auto-exec.sh --force-lock     # ignore existing lock file
+#   auto-exec.sh                # requires clean git status
+#   auto-exec.sh --allow-dirty  # allow dirty working tree
+#   auto-exec.sh --dry-run      # ask Codex to only propose a plan (no edits)
+#   auto-exec.sh --sandbox <mode>  # set codex sandbox (default: workspace-write)
+#   auto-exec.sh --full-auto      # no prompts; bypass approvals/sandbox (dangerous)
+#   auto-exec.sh --force-lock     # ignore existing lock file
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
@@ -41,7 +41,7 @@ done
 cd "$ROOT_DIR"
 
 if [[ ! -f "$TASKS_FILE" ]]; then
-  echo "Missing tasks file: $TASKS_FILE. Run scripts/auto-iterate.sh --codex first." >&2
+  echo "Missing tasks file: $TASKS_FILE. Run \"$SCRIPT_DIR/auto-iterate.sh\" --codex first." >&2
   exit 1
 fi
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Generate/refresh PLAN.md via Codex CLI only.
+# Generate/refresh plan file via Codex CLI only.
 # Usage:
-#   scripts/auto-plan.sh --codex
+#   auto-plan.sh --codex
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
@@ -13,7 +13,7 @@ DATE_STR="$(date +%Y-%m-%d)"
 cd "$ROOT_DIR"
 
 if [[ "${1:-}" != "--codex" ]]; then
-  echo "Usage: scripts/auto-plan.sh --codex" >&2
+  echo "Usage: auto-plan.sh --codex" >&2
   exit 1
 fi
 
@@ -30,8 +30,8 @@ fi
 GIT_STATUS=$(git status --porcelain || true)
 
 PROMPT=$(cat <<EOF
-You are maintaining $PROJECT_NAME. Update PLAN.md to reflect current priorities.
-This is a higher-level plan, broader than TASKS.md.
+You are maintaining $PROJECT_NAME. Update $PLAN_FILE to reflect current priorities.
+This is a higher-level plan, broader than $TASKS_FILE.
 Requirements:
 - Output ONLY Markdown that starts with "# Plan"
 - Include "## $DATE_STR" as the latest plan section
@@ -55,7 +55,7 @@ TMP_OUT="$(mktemp)"
 "$SCRIPT_DIR/codex-run.sh" exec "$PROMPT" > "$TMP_OUT"
 
 if ! head -n 1 "$TMP_OUT" | grep -iq "^# plan"; then
-  echo "Codex output did not start with the expected header. PLAN.md not updated." >&2
+  echo "Codex output did not start with the expected header. $(basename "$PLAN_FILE") not updated." >&2
   cat "$TMP_OUT" >&2
   rm -f "$TMP_OUT"
   exit 1
@@ -73,7 +73,7 @@ fi
 
 cat >> "$LOG_FILE" <<EOF
 ## $DATE_STR
-- Generated PLAN.md via Codex.
+- Generated $(basename "$PLAN_FILE") via Codex.
 EOF
 
 echo "Updated: $PLAN_FILE"
