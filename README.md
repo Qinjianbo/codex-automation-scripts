@@ -81,7 +81,7 @@ scripts/auto-run.sh
 
 - `codex-run.sh`  
   Wrapper to run Codex CLI in non‑TUI mode with the configured Node/Codex paths.  
-  Example: `scripts/codex-run.sh exec "Summarize repo status"`
+  Example: `./codex-run.sh exec "Summarize repo status"`
 
 - `auto-iterate.sh --codex`  
   Generates `TASKS.md` using Codex based on `PLAN.md`, existing tasks, and git status.

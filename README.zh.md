@@ -81,7 +81,7 @@ scripts/auto-run.sh
 
 - `codex-run.sh`
   封装运行 Codex CLI（非 TUI 模式），使用配置中的 Node/Codex 路径。  
-  示例：`scripts/codex-run.sh exec "Summarize repo status"`
+  示例：`./codex-run.sh exec "Summarize repo status"`
 
 - `auto-iterate.sh --codex`
   基于 `PLAN.md`、已有 `TASKS.md` 和 git 状态生成 `TASKS.md`。

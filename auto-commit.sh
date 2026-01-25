@@ -52,4 +52,4 @@ $STATUS
 EOF
 )
 
-scripts/codex-run.sh --dangerously-bypass-approvals-and-sandbox exec "$PROMPT"
+"$SCRIPT_DIR/codex-run.sh" --dangerously-bypass-approvals-and-sandbox exec "$PROMPT"

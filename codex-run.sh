@@ -18,8 +18,8 @@ if [[ ! -f "$CODEX_CLI" ]]; then
 fi
 
 if [[ $# -lt 1 ]]; then
-  echo "Usage: scripts/codex-run.sh <codex-subcommand> [args...]" >&2
-  echo "Example: scripts/codex-run.sh exec \"Summarize repo status\"" >&2
+  echo "Usage: ./codex-run.sh <codex-subcommand> [args...]" >&2
+  echo "Example: ./codex-run.sh exec \"Summarize repo status\"" >&2
   exit 1
 fi
 

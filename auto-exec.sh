@@ -90,9 +90,9 @@ fi
 PROMPT="${PROMPT}"$'\n\n'"$TASKS_FILE"$':\n'"$TASKS_CONTENT"
 
 if [[ "$FULL_AUTO" == "true" ]]; then
-  scripts/codex-run.sh --dangerously-bypass-approvals-and-sandbox exec "$PROMPT"
+  "$SCRIPT_DIR/codex-run.sh" --dangerously-bypass-approvals-and-sandbox exec "$PROMPT"
 else
-  scripts/codex-run.sh --sandbox "$SANDBOX_MODE" --ask-for-approval on-request exec "$PROMPT"
+  "$SCRIPT_DIR/codex-run.sh" --sandbox "$SANDBOX_MODE" --ask-for-approval on-request exec "$PROMPT"
 fi
 
 if [[ ! -f "$LOG_FILE" ]]; then

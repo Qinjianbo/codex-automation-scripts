@@ -52,7 +52,7 @@ EOF
 )
 
 TMP_OUT="$(mktemp)"
-scripts/codex-run.sh exec "$PROMPT" > "$TMP_OUT"
+"$SCRIPT_DIR/codex-run.sh" exec "$PROMPT" > "$TMP_OUT"
 
 if ! head -n 1 "$TMP_OUT" | grep -iq "^# plan"; then
   echo "Codex output did not start with the expected header. PLAN.md not updated." >&2
