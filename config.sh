@@ -4,15 +4,21 @@ set -euo pipefail
 # Lightweight config loader for scripts.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(git -C "$PWD" rev-parse --show-superproject-working-tree 2>/dev/null || true)"
-if [[ -z "$ROOT_DIR" ]]; then
-  ROOT_DIR="$(git -C "$PWD" rev-parse --show-toplevel 2>/dev/null || true)"
-fi
-if [[ -z "$ROOT_DIR" ]]; then
-  ROOT_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-superproject-working-tree 2>/dev/null || true)"
-fi
+ROOT_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-superproject-working-tree 2>/dev/null || true)"
 if [[ -z "$ROOT_DIR" ]]; then
   ROOT_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || true)"
+fi
+if [[ -z "$ROOT_DIR" && -f "$SCRIPT_DIR/config.yaml" ]]; then
+  ROOT_DIR="$SCRIPT_DIR"
+fi
+if [[ -z "$ROOT_DIR" && -f "$SCRIPT_DIR/../config.yaml" ]]; then
+  ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+fi
+if [[ -z "$ROOT_DIR" ]]; then
+  ROOT_DIR="$(git -C "$PWD" rev-parse --show-superproject-working-tree 2>/dev/null || true)"
+fi
+if [[ -z "$ROOT_DIR" ]]; then
+  ROOT_DIR="$(git -C "$PWD" rev-parse --show-toplevel 2>/dev/null || true)"
 fi
 if [[ -z "$ROOT_DIR" ]]; then
   ROOT_DIR="$PWD"
@@ -53,7 +59,7 @@ load_config() {
   TASKS_FILE="${TASKS_FILE:-$ROOT_DIR/TASKS.md}"
   PLAN_FILE="${PLAN_FILE:-$ROOT_DIR/PLAN.md}"
   LOG_FILE="${LOG_FILE:-$ROOT_DIR/ITERATION_LOG.md}"
-  LOCK_FILE="${LOCK_FILE:-$ROOT_DIR/.auto-exec.lock}"
+  LOCK_FILE="${LOCK_FILE:-$ROOT_DIR/.auto-run.lock}"
   DEFAULT_SANDBOX="${DEFAULT_SANDBOX:-workspace-write}"
 
   local config_to_use=""

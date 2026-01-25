@@ -11,6 +11,6 @@ git_remote: origin
 tasks_file: TASKS.md
 plan_file: PLAN.md
 log_file: ITERATION_LOG.md
-lock_file: .auto-exec.lock
+lock_file: .auto-run.lock
 
 default_sandbox: workspace-write

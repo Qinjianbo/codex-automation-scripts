@@ -8,6 +8,7 @@ set -euo pipefail
 #   auto-run.sh --dry-run
 #   auto-run.sh --full-auto
 #   auto-run.sh --skip-plan
+#   auto-run.sh --force-lock
 #   auto-run.sh --skip-commit
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -20,6 +21,7 @@ DRY_RUN="false"
 FULL_AUTO="false"
 SKIP_PLAN="false"
 SKIP_COMMIT="false"
+FORCE_LOCK="false"
 
 for arg in "$@"; do
   case "$arg" in
@@ -27,10 +29,24 @@ for arg in "$@"; do
     --dry-run) DRY_RUN="true" ;;
     --full-auto) FULL_AUTO="true" ;;
     --skip-plan) SKIP_PLAN="true" ;;
+    --force-lock) FORCE_LOCK="true" ;;
     --skip-commit) SKIP_COMMIT="true" ;;
     *) echo "Unknown option: $arg" >&2; exit 1 ;;
   esac
 done
+
+if [[ "$FORCE_LOCK" == "true" ]]; then
+  rm -f "$LOCK_FILE"
+fi
+
+if ( set -o noclobber; echo "pid=$$" > "$LOCK_FILE" ) 2>/dev/null; then
+  echo "started=$(date -Iseconds)" >> "$LOCK_FILE"
+else
+  echo "auto-run is already running (lock file exists): $LOCK_FILE" >&2
+  echo "Use --force-lock to override if you are sure it's stale." >&2
+  exit 1
+fi
+trap 'rm -f "$LOCK_FILE"' EXIT
 
 if [[ "$SKIP_PLAN" == "false" ]]; then
   echo "[1/4] Update $(basename "$PLAN_FILE") via Codex..."

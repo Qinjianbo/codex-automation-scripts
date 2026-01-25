@@ -89,7 +89,7 @@ cp <scripts_dir>/config.example.yaml config.yaml
 
 - `auto-exec.sh`  
   Executes unchecked tasks from the tasks file (default: `TASKS.md`) and updates task status.  
-  Flags: `--dry-run`, `--allow-dirty`, `--full-auto`, `--force-lock`.
+  Flags: `--dry-run`, `--allow-dirty`, `--full-auto`.
 
 - `auto-commit.sh`  
   Uses Codex to stage, commit, and push to `git_remote/git_branch`.  
@@ -97,10 +97,10 @@ cp <scripts_dir>/config.example.yaml config.yaml
 
 - `auto-run.sh`  
   Orchestrates `auto-iterate` → `auto-exec` → `auto-commit`.  
-  Flags: `--dry-run`, `--allow-dirty`, `--full-auto`, `--skip-plan`, `--skip-commit`.
+  Flags: `--dry-run`, `--allow-dirty`, `--full-auto`, `--skip-plan`, `--force-lock`, `--skip-commit`.
 
 ## Locking
-`auto-exec.sh` writes a lock file (default: `.auto-exec.lock`) to prevent concurrent runs.
+`auto-run.sh` writes a lock file (default: `.auto-run.lock`) to prevent concurrent runs.
 Use `--force-lock` to override if you’re sure it’s stale.
 
 ## Notes

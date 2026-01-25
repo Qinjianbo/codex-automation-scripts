@@ -8,7 +8,6 @@ set -euo pipefail
 #   auto-exec.sh --dry-run      # ask Codex to only propose a plan (no edits)
 #   auto-exec.sh --sandbox <mode>  # set codex sandbox (default: workspace-write)
 #   auto-exec.sh --full-auto      # no prompts; bypass approvals/sandbox (dangerous)
-#   auto-exec.sh --force-lock     # ignore existing lock file
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
@@ -18,7 +17,6 @@ ALLOW_DIRTY="false"
 DRY_RUN="false"
 SANDBOX_MODE="$DEFAULT_SANDBOX"
 FULL_AUTO="false"
-FORCE_LOCK="false"
 
 for arg in "$@"; do
   case "$arg" in
@@ -31,9 +29,6 @@ for arg in "$@"; do
     --full-auto)
       FULL_AUTO="true"
       ;;
-    --force-lock)
-      FORCE_LOCK="true"
-      ;;
     *) echo "Unknown option: $arg" >&2; exit 1 ;;
   esac
 done
@@ -44,20 +39,6 @@ if [[ ! -f "$TASKS_FILE" ]]; then
   echo "Missing tasks file: $TASKS_FILE. Run \"$SCRIPT_DIR/auto-iterate.sh\" --codex first." >&2
   exit 1
 fi
-
-if [[ -f "$LOCK_FILE" && "$FORCE_LOCK" == "false" ]]; then
-  echo "auto-exec is already running (lock file exists): $LOCK_FILE" >&2
-  echo "Use --force-lock to override if you are sure it's stale." >&2
-  exit 1
-fi
-
-if [[ "$FORCE_LOCK" == "true" ]]; then
-  rm -f "$LOCK_FILE"
-fi
-
-echo "pid=$$" > "$LOCK_FILE"
-echo "started=$(date -Iseconds)" >> "$LOCK_FILE"
-trap 'rm -f "$LOCK_FILE"' EXIT
 
 if [[ "$ALLOW_DIRTY" == "false" ]]; then
   if git status --porcelain | grep -q .; then

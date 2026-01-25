@@ -89,7 +89,7 @@ cp <scripts_dir>/config.example.yaml config.yaml
 
 - `auto-exec.sh`
   执行任务文件（默认：`TASKS.md`）中未完成的任务并更新状态。  
-  参数：`--dry-run`、`--allow-dirty`、`--full-auto`、`--force-lock`。
+  参数：`--dry-run`、`--allow-dirty`、`--full-auto`。
 
 - `auto-commit.sh`
   使用 Codex 进行 stage/commit/push 到 `git_remote/git_branch`。  
@@ -97,10 +97,10 @@ cp <scripts_dir>/config.example.yaml config.yaml
 
 - `auto-run.sh`
   串联 `auto-iterate` → `auto-exec` → `auto-commit`。  
-  参数：`--dry-run`、`--allow-dirty`、`--full-auto`、`--skip-plan`、`--skip-commit`。
+  参数：`--dry-run`、`--allow-dirty`、`--full-auto`、`--skip-plan`、`--force-lock`、`--skip-commit`。
 
 ## 锁机制
-`auto-exec.sh` 会写入锁文件（默认：`.auto-exec.lock`）以防并发运行。
+`auto-run.sh` 会写入锁文件（默认：`.auto-run.lock`）以防并发运行。
 若确定锁文件过期，可使用 `--force-lock` 强制覆盖。
 
 ## 备注
