@@ -36,11 +36,10 @@ cp <scripts_dir>/config.example.yaml config.yaml
 5) 从目标仓库根目录运行脚本：
 
 ```bash
+# 需要调整范围/思路时，先刷新计划
 <scripts_dir>/auto-plan.sh --codex
-<scripts_dir>/auto-iterate.sh --codex
-<scripts_dir>/auto-exec.sh
-<scripts_dir>/auto-commit.sh
-# 或执行全流程
+
+# 然后跑任务流水线（迭代 → 执行 → 提交）
 <scripts_dir>/auto-run.sh
 ```
 
@@ -67,13 +66,17 @@ cp <scripts_dir>/config.example.yaml config.yaml
 5) 从目标仓库根目录运行脚本：
 
 ```bash
+# 需要调整范围/思路时，先刷新计划
 <scripts_dir>/auto-plan.sh --codex
-<scripts_dir>/auto-iterate.sh --codex
-<scripts_dir>/auto-exec.sh
-<scripts_dir>/auto-commit.sh
-# 或执行全流程
+
+# 然后跑任务流水线（迭代 → 执行 → 提交）
 <scripts_dir>/auto-run.sh
 ```
+
+## 最佳实践
+
+- 先做计划：用 `auto-plan.sh --codex` 产出、review 并确认 `PLAN.md`。计划是执行前的先行条件，大的解决思路和框架应该在计划里定好，避免后续跑偏。
+- 再去交付：用 `auto-run.sh` 生成任务、执行并提交代码。它假定计划已更新且达成共识。
 
 ## 核心脚本
 
@@ -96,8 +99,8 @@ cp <scripts_dir>/config.example.yaml config.yaml
   可选：`-m "feat: your message"`
 
 - `auto-run.sh`
-  串联 `auto-iterate` → `auto-exec` → `auto-commit`。  
-  参数：`--dry-run`、`--allow-dirty`、`--full-auto`、`--skip-plan`、`--force-lock`、`--skip-commit`。
+  串联 `auto-iterate` → `auto-exec` → `auto-commit`（计划需单独维护）。  
+  参数：`--dry-run`、`--allow-dirty`、`--full-auto`、`--force-lock`、`--skip-commit`。
 
 ## 锁机制
 `auto-run.sh` 会写入锁文件（默认：`.auto-run.lock`）以防并发运行。

@@ -33,14 +33,13 @@ cp <scripts_dir>/config.example.yaml config.yaml
 
 4) Ensure your plan file exists (default: `PLAN.md`; create an empty one if needed).
 
-5) Run scripts from the target repo root:
+5) Run from the target repo root:
 
 ```bash
+# Refresh or adjust the plan when scope changes
 <scripts_dir>/auto-plan.sh --codex
-<scripts_dir>/auto-iterate.sh --codex
-<scripts_dir>/auto-exec.sh
-<scripts_dir>/auto-commit.sh
-# or run the full pipeline
+
+# Then run the task pipeline (iterate → execute → commit)
 <scripts_dir>/auto-run.sh
 ```
 
@@ -64,16 +63,20 @@ cp <scripts_dir>/config.example.yaml config.yaml
 
 4) Ensure your plan file exists in your target repo root (default: `PLAN.md`).
 
-5) Run scripts from the target repo root:
+5) Run from the target repo root:
 
 ```bash
+# Refresh or adjust the plan when scope changes
 <scripts_dir>/auto-plan.sh --codex
-<scripts_dir>/auto-iterate.sh --codex
-<scripts_dir>/auto-exec.sh
-<scripts_dir>/auto-commit.sh
-# or run the full pipeline
+
+# Then run the task pipeline (iterate → execute → commit)
 <scripts_dir>/auto-run.sh
 ```
+
+## Recommended Workflow
+
+- Plan first: run `auto-plan.sh --codex` to draft, review, and finalize `PLAN.md` before execution. A clear plan sets the high-level frame and keeps downstream tasks aligned.
+- Ship via auto-run: run `auto-run.sh` to generate tasks, execute them, and commit/push. It assumes the plan is already up to date.
 
 ## Core Scripts
 
@@ -96,8 +99,8 @@ cp <scripts_dir>/config.example.yaml config.yaml
   Optional: `-m "feat: your message"`
 
 - `auto-run.sh`  
-  Orchestrates `auto-iterate` → `auto-exec` → `auto-commit`.  
-  Flags: `--dry-run`, `--allow-dirty`, `--full-auto`, `--skip-plan`, `--force-lock`, `--skip-commit`.
+  Orchestrates `auto-iterate` → `auto-exec` → `auto-commit` (plan is managed separately).  
+  Flags: `--dry-run`, `--allow-dirty`, `--full-auto`, `--force-lock`, `--skip-commit`.
 
 ## Locking
 `auto-run.sh` writes a lock file (default: `.auto-run.lock`) to prevent concurrent runs.
