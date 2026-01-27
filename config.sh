@@ -63,6 +63,7 @@ load_config() {
   PLAN_CONTEXT_FILES="${PLAN_CONTEXT_FILES:-README.md,ROADMAP.md,CHANGELOG.md}"
   PLAN_CONTEXT_MAX_CHARS="${PLAN_CONTEXT_MAX_CHARS:-12000}"
   DEFAULT_SANDBOX="${DEFAULT_SANDBOX:-workspace-write}"
+  CODEX_LANGUAGE="${CODEX_LANGUAGE:-English}"
 
   local config_to_use=""
   if [[ -f "$CONFIG_FILE" ]]; then
@@ -97,6 +98,7 @@ load_config() {
         plan_context_files) PLAN_CONTEXT_FILES="$val" ;;
         plan_context_max_chars) PLAN_CONTEXT_MAX_CHARS="$val" ;;
         default_sandbox) DEFAULT_SANDBOX="$val" ;;
+        codex_language|response_language) CODEX_LANGUAGE="$val" ;;
       esac
     done < <(grep -v '^[[:space:]]*$' "$config_to_use" | grep -v '^[[:space:]]*#')
   fi

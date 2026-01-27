@@ -17,3 +17,6 @@ plan_context_files: README.md,ROADMAP.md,CHANGELOG.md
 plan_context_max_chars: 12000
 
 default_sandbox: workspace-write
+
+# Language Codex should reply in (keep required headings intact)
+codex_language: English

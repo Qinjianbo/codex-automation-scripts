@@ -9,6 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 load_config
 DATE_STR="$(date +%Y-%m-%d)"
+LANG_NOTE="Use $CODEX_LANGUAGE for all prose. Keep required headings exactly as specified."
 
 cd "$ROOT_DIR"
 
@@ -26,6 +27,7 @@ GIT_STATUS=$(git status --porcelain || true)
 
 PROMPT=$(cat <<EOF
 You are maintaining $PROJECT_NAME. Generate a concise task list for today.
+$LANG_NOTE
 Requirements:
 - Output ONLY Markdown that starts with "# Tasks (Auto-generated)"
 - Include "## $DATE_STR"

@@ -10,6 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 load_config
 cd "$ROOT_DIR"
+LANG_NOTE="Use $CODEX_LANGUAGE for all responses."
 
 COMMIT_MSG=""
 while getopts ":m:" opt; do
@@ -41,6 +42,7 @@ fi
 PROMPT=$(cat <<EOF
 You are in the $PROJECT_NAME repo on branch $GIT_BRANCH.
 Stage all changes, create a commit, and push to ${GIT_REMOTE}/${GIT_BRANCH}.
+$LANG_NOTE
 
 Rules:
 - Do not modify files beyond what is necessary to stage/commit.

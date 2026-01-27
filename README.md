@@ -8,7 +8,7 @@ All scripts are plain Bash and should be run from your target repo root (or any 
 ## Configuration
 - Create a project‑specific config at `config.yaml` (repo root), or at `<scripts_dir>/config.yaml`.
 - Use `<scripts_dir>/config.example.yaml` as a template.
-- Key fields: `project_name`, `codex_node`, `codex_cli`, `git_branch`, `git_remote`, `tasks_file`, `plan_file`, `plan_context_files`.
+- Key fields: `project_name`, `codex_node`, `codex_cli`, `git_branch`, `git_remote`, `tasks_file`, `plan_file`, `plan_context_files`, `codex_language`.
 
 ## Usage
 You can use these scripts in two common ways: clone into your target repo, or add as a Git submodule.
@@ -77,6 +77,7 @@ cp <scripts_dir>/config.example.yaml config.yaml
 
 - Plan first: run `auto-plan.sh --codex` to draft, review, and finalize `PLAN.md` before execution. A clear plan sets the high-level frame and keeps downstream tasks aligned.
 - Ship via auto-run: run `auto-run.sh` to generate tasks, execute them, and commit/push. It assumes the plan is already up to date.
+- Language: set `codex_language` in `config.yaml` (e.g., `English`, `简体中文`). Headings stay as specified (`# Plan`, `# Tasks (Auto-generated)`) while body text follows your language.
 
 ## Core Scripts
 

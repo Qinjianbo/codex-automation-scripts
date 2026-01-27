@@ -9,6 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 load_config
 DATE_STR="$(date +%Y-%m-%d)"
+LANG_NOTE="Use $CODEX_LANGUAGE for all prose. Keep required headings exactly as specified."
 
 cd "$ROOT_DIR"
 
@@ -62,6 +63,7 @@ if [[ -n "$CONTEXT_RAW" ]]; then
 
   SUMMARY_PROMPT=$(cat <<EOF
 You are summarizing project context for planning.
+$LANG_NOTE
 Summarize the content below into 4-8 concise bullet points.
 Focus on goals, scope, constraints, current progress, and open questions.
 Output ONLY a Markdown bullet list (no heading).
@@ -79,6 +81,7 @@ fi
 
 PROMPT=$(cat <<EOF
 You are maintaining $PROJECT_NAME. Update $PLAN_FILE to reflect current priorities.
+$LANG_NOTE
 This is a higher-level plan, broader than $TASKS_FILE.
 Requirements:
 - Output ONLY Markdown that starts with "# Plan"

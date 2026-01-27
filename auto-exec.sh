@@ -17,6 +17,7 @@ ALLOW_DIRTY="false"
 DRY_RUN="false"
 SANDBOX_MODE="$DEFAULT_SANDBOX"
 FULL_AUTO="false"
+LANG_NOTE="Use $CODEX_LANGUAGE for all responses."
 
 for arg in "$@"; do
   case "$arg" in
@@ -51,6 +52,7 @@ TASKS_CONTENT="$(cat "$TASKS_FILE")"
 
 PROMPT=$(cat <<EOF
 You are a coding agent working inside this repo. Implement the unchecked tasks from $TASKS_FILE.
+$LANG_NOTE
 
 Rules:
 - Make small, safe changes only; avoid refactors.

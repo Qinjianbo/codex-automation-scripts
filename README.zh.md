@@ -8,7 +8,7 @@
 ## 配置
 - 在目标仓库根目录创建 `config.yaml`，或在 `<scripts_dir>/config.yaml` 创建。
 - 可基于 `<scripts_dir>/config.example.yaml` 复制修改。
-- 关键字段：`project_name`、`codex_node`、`codex_cli`、`git_branch`、`git_remote`、`tasks_file`、`plan_file`、`plan_context_files`。
+- 关键字段：`project_name`、`codex_node`、`codex_cli`、`git_branch`、`git_remote`、`tasks_file`、`plan_file`、`plan_context_files`、`codex_language`。
 
 ## 使用方式
 你可以用两种常见方式集成这些脚本：直接克隆到项目，或作为 Git submodule 引入。
@@ -77,6 +77,7 @@ cp <scripts_dir>/config.example.yaml config.yaml
 
 - 先做计划：用 `auto-plan.sh --codex` 产出、review 并确认 `PLAN.md`。计划是执行前的先行条件，大的解决思路和框架应该在计划里定好，避免后续跑偏。
 - 再去交付：用 `auto-run.sh` 生成任务、执行并提交代码。它假定计划已更新且达成共识。
+- 语言：在 `config.yaml` 中设置 `codex_language`（如 `English`、`简体中文`）。标题需保持原文（`# Plan`、`# Tasks (Auto-generated)`），正文会按配置语言输出。
 
 ## 核心脚本
 
