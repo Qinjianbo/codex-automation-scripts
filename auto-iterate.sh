@@ -34,6 +34,7 @@ Requirements:
 - Provide 4-6 checkbox items
 - Prioritize unfinished tasks from the existing $TASKS_FILE and $PLAN_FILE
 - Keep tasks small, specific, and actionable
+- If $PLAN_FILE has no remaining actionable items (or all tasks are already completed), output exactly "已无计划可以进行" and nothing else
 
 Current $PLAN_FILE:
 $PLAN_CONTENT
@@ -49,8 +50,9 @@ EOF
 TMP_OUT="$(mktemp)"
 "$SCRIPT_DIR/codex-run.sh" exec "$PROMPT" > "$TMP_OUT"
 
-if ! head -n 1 "$TMP_OUT" | grep -q "# Tasks (Auto-generated)"; then
-  echo "Codex output did not start with the expected header. $(basename "$TASKS_FILE") not updated." >&2
+FIRST_LINE="$(head -n 1 "$TMP_OUT" || true)"
+if [[ "$FIRST_LINE" != "已无计划可以进行" ]] && ! grep -q "^# Tasks (Auto-generated)" <<<"$FIRST_LINE"; then
+  echo "Codex output did not start with the expected header or the 'no plan' message. $(basename "$TASKS_FILE") not updated." >&2
   cat "$TMP_OUT" >&2
   rm -f "$TMP_OUT"
   exit 1

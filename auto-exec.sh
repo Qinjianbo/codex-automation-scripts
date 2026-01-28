@@ -60,6 +60,7 @@ Rules:
 - Prefer editing existing files; avoid new dependencies.
 - Update CHANGELOG.md if user-visible behavior changes.
 - Report what you changed and any manual checks.
+- After completing tasks, update $PLAN_FILE to reflect plan progress/status based on the work done.
 - After completing tasks, update $TASKS_FILE by checking off items you completed.
 
 If --dry-run is enabled, produce a plan only and do not edit files.

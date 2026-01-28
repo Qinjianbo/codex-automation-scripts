@@ -86,10 +86,16 @@ This is a higher-level plan, broader than $TASKS_FILE.
 Requirements:
 - Output ONLY Markdown that starts with "# Plan"
 - Include "## $DATE_STR" as the latest plan section
-- Provide 3-6 goal-oriented bullets (themes/milestones), not step-by-step tasks
-- Each bullet should be a short, meaningful outcome (bigger than a single coding task)
-- Align with current tasks and repo status without duplicating items from $TASKS_FILE
-- If there is previous plan content, preserve any still-relevant items and prune stale ones
+- Produce a concise but complete plan grounded in the current project state; do not limit the plan to a few bullets
+- Under "## $DATE_STR", include these subsections (omit only if truly not applicable):
+  - "### Objectives" with 3-7 outcome-oriented goals (broader than single tasks)
+  - "### Current Status" with 2-5 bullets summarizing where things stand (reference git status/tasks for signal)
+  - "### Milestones & Dates" with 3-6 dated or orderable milestones (month-level dates are fine if exact dates unknown)
+  - "### Risks & Mitigations" with 2-5 bullets pairing each risk with a mitigation
+  - "### Next 1-2 Weeks" with 3-7 priority focuses (group related tasks without copying $TASKS_FILE verbatim)
+  - "### Out of Scope / Not Now" with any items being deferred (omit if none)
+- Keep content actionable but higher-level than $TASKS_FILE; avoid duplicating line-by-line tasks
+- If there is previous plan content, preserve still-relevant items/sections and prune stale ones
 
 Existing $PLAN_FILE:
 $PLAN_CONTENT
