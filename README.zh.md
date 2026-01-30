@@ -13,6 +13,11 @@
   - `codex_model_default`：所有步骤的默认模型。
   - `codex_model_iterate`、`codex_model_plan`、`codex_model_exec`、`codex_model_commit`：分别覆盖任务生成、计划刷新、任务执行、提交阶段的模型；留空则回退到 `codex_model_default` 或 Codex CLI 默认模型。
 
+### 图形化配置工具
+- 直接运行：`python3 tools/config_gui.py`（需先 `pip install -r requirements-gui.txt`）。
+- 打包为应用（PyInstaller）：执行 `tools/build_config_gui.sh`，产物在 `dist/`（macOS 为 `.app`）。
+- 功能：加载/保存 `config.yaml`，保存可备份，路径选择器，sandbox/model 下拉，快速测试 `codex-run.sh --help`。
+
 ## 使用方式
 你可以用两种常见方式集成这些脚本：直接克隆到项目，或作为 Git submodule 引入。
 脚本目录可自定义，下面用 `<scripts_dir>` 作为占位（例如 `scripts`）。

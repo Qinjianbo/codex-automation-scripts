@@ -95,18 +95,24 @@ You are maintaining $PROJECT_NAME. Update $PLAN_FILE to reflect current prioriti
 $LANG_NOTE
 This is a higher-level plan, broader than $TASKS_FILE.
 Requirements:
-- Output ONLY Markdown that starts with "# Plan"
-- Include "## $DATE_STR" as the latest plan section
-- Produce a concise but complete plan grounded in the current project state; do not limit the plan to a few bullets
-- Under "## $DATE_STR", include these subsections (omit only if truly not applicable):
-  - "### Objectives" with 3-7 outcome-oriented goals (broader than single tasks)
-  - "### Current Status" with 2-5 bullets summarizing where things stand (reference git status/tasks for signal)
-  - "### Milestones & Dates" with 3-6 dated or orderable milestones (month-level dates are fine if exact dates unknown)
-  - "### Risks & Mitigations" with 2-5 bullets pairing each risk with a mitigation
-  - "### Next 1-2 Weeks" with 3-7 priority focuses (group related tasks without copying $TASKS_FILE verbatim)
-  - "### Out of Scope / Not Now" with any items being deferred (omit if none)
-- Keep content actionable but higher-level than $TASKS_FILE; avoid duplicating line-by-line tasks
-- If there is previous plan content, preserve still-relevant items/sections and prune stale ones
+- Output ONLY Markdown that starts with "# Plan".
+- This document is a single canonical project plan, NOT a changelog.
+  - Do NOT append dated update sections (e.g. "## $DATE_STR") or multiple plan versions.
+  - If a plan already exists, revise it in place: keep the useful structure, update outdated parts, merge in new information, and remove anything obsolete.
+  - If no plan exists, create an initial complete plan suitable for guiding execution.
+- Keep it higher-level than $TASKS_FILE (do not copy tasks line-by-line), but concrete enough to guide work:
+  include objectives/success criteria, scope/non-goals, milestones/roadmap, risks/mitigations, assumptions/open questions,
+  and immediate next priorities.
+- Optional but recommended: include a single "Last updated: $DATE_STR" line near the top; if it already exists, update it (do not add another).
+- Include a progress tracking area to support a tight loop with auto-exec.sh:
+  - Add a visible section heading: "## Progress Tracking (Auto-updated)".
+  - Inside that section, include a progress block delimited by these exact markers:
+    <!-- AUTO-PROGRESS:START -->
+    <!-- AUTO-PROGRESS:END -->
+  - Inside the block, list high-level milestones/objectives as one line each, prefixed with exactly one status token:
+    [TODO], [DOING], [DONE], or [BLOCKED]. Keep the rest of each line stable so status can be updated without rewriting.
+  - If the progress block already exists, preserve its items and statuses; only add/remove lines if the plan scope changed
+    (do not reset statuses to [TODO] unless the work was truly undone).
 
 Existing $PLAN_FILE:
 $PLAN_CONTENT

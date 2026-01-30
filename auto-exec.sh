@@ -69,7 +69,16 @@ Rules:
 - Prefer editing existing files; avoid new dependencies.
 - Update CHANGELOG.md if user-visible behavior changes.
 - Report what you changed and any manual checks.
-- After completing tasks, update $PLAN_FILE to reflect plan progress/status based on the work done.
+- After completing tasks, update $PLAN_FILE PROGRESS ONLY (do not rewrite plan content):
+  - Only edit progress marker lines inside the block delimited by:
+    <!-- AUTO-PROGRESS:START --> and <!-- AUTO-PROGRESS:END --> (if present).
+  - Allowed edits inside the block: change ONLY the status token at the start of a line:
+    [TODO] -> [DOING] / [DONE] / [BLOCKED].
+  - Outside the block, do not change anything in $PLAN_FILE except optionally updating a single existing
+    "Last updated: YYYY-MM-DD" line near the top (do not add a new one if missing).
+  - Do not add/reorder/remove plan sections, objectives, scope, or milestone text; do not append dated plan versions.
+  - If the progress block is missing (or you are unsure how to map completed tasks to progress lines), leave $PLAN_FILE untouched
+    and mention it in your report.
 - After completing tasks, update $TASKS_FILE by checking off items you completed.
 
 If --dry-run is enabled, produce a plan only and do not edit files.
