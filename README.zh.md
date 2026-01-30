@@ -9,6 +9,9 @@
 - 在目标仓库根目录创建 `config.yaml`，或在 `<scripts_dir>/config.yaml` 创建。
 - 可基于 `<scripts_dir>/config.example.yaml` 复制修改。
 - 关键字段：`project_name`、`codex_node`、`codex_cli`、`git_branch`、`git_remote`、`tasks_file`、`plan_file`、`plan_context_files`、`codex_language`。
+- 模型配置（可选，按步骤切换模型以节省 token）：
+  - `codex_model_default`：所有步骤的默认模型。
+  - `codex_model_iterate`、`codex_model_plan`、`codex_model_exec`、`codex_model_commit`：分别覆盖任务生成、计划刷新、任务执行、提交阶段的模型；留空则回退到 `codex_model_default` 或 Codex CLI 默认模型。
 
 ## 使用方式
 你可以用两种常见方式集成这些脚本：直接克隆到项目，或作为 Git submodule 引入。

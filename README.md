@@ -9,6 +9,9 @@ All scripts are plain Bash and should be run from your target repo root (or any 
 - Create a project‑specific config at `config.yaml` (repo root), or at `<scripts_dir>/config.yaml`.
 - Use `<scripts_dir>/config.example.yaml` as a template.
 - Key fields: `project_name`, `codex_node`, `codex_cli`, `git_branch`, `git_remote`, `tasks_file`, `plan_file`, `plan_context_files`, `codex_language`.
+- Model selection (optional):
+  - `codex_model_default`: fallback model for all steps when step‑specific values are empty.
+  - `codex_model_iterate`, `codex_model_plan`, `codex_model_exec`, `codex_model_commit`: override the model per step (task generation, plan refresh, task execution, commit). Leave blank to inherit the default or CLI’s own default.
 
 ## Usage
 You can use these scripts in two common ways: clone into your target repo, or add as a Git submodule.

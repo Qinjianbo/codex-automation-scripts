@@ -5,6 +5,14 @@ project_name: ExampleProject
 codex_node: ~/.nvm/versions/node/v22.18.0/bin/node
 codex_cli: ~/.nvm/versions/node/v22.18.0/lib/node_modules/@openai/codex/bin/codex.js
 
+# Optional: model selection (leave blank to use Codex CLI default)
+# codex_model_default will be used when step-specific values are empty.
+codex_model_default: ""
+codex_model_iterate: ""
+codex_model_plan: ""
+codex_model_exec: ""
+codex_model_commit: ""
+
 git_branch: main
 git_remote: origin
 

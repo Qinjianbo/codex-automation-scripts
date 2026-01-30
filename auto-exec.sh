@@ -21,6 +21,12 @@ DRY_RUN="false"
 SANDBOX_MODE="$DEFAULT_SANDBOX"
 FULL_AUTO="false"
 LANG_NOTE="Use $CODEX_LANGUAGE for all responses."
+MODEL_ARGS=()
+if [[ -n "${CODEX_MODEL_EXEC:-}" ]]; then
+  MODEL_ARGS+=(--model "$CODEX_MODEL_EXEC")
+elif [[ -n "${CODEX_MODEL_DEFAULT:-}" ]]; then
+  MODEL_ARGS+=(--model "$CODEX_MODEL_DEFAULT")
+fi
 
 for arg in "$@"; do
   case "$arg" in
@@ -77,9 +83,9 @@ fi
 PROMPT="${PROMPT}"$'\n\n'"$TASKS_FILE"$':\n'"$TASKS_CONTENT"
 
 if [[ "$FULL_AUTO" == "true" ]]; then
-  "$SCRIPT_DIR/codex-run.sh" --dangerously-bypass-approvals-and-sandbox exec "$PROMPT"
+  "$SCRIPT_DIR/codex-run.sh" "${MODEL_ARGS[@]}" --dangerously-bypass-approvals-and-sandbox exec "$PROMPT"
 else
-  "$SCRIPT_DIR/codex-run.sh" --sandbox "$SANDBOX_MODE" --ask-for-approval on-request exec "$PROMPT"
+  "$SCRIPT_DIR/codex-run.sh" "${MODEL_ARGS[@]}" --sandbox "$SANDBOX_MODE" --ask-for-approval on-request exec "$PROMPT"
 fi
 
 if [[ ! -f "$LOG_FILE" ]]; then

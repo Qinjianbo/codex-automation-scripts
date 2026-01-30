@@ -11,6 +11,12 @@ source "$SCRIPT_DIR/config.sh"
 load_config
 cd "$ROOT_DIR"
 LANG_NOTE="Use $CODEX_LANGUAGE for all responses."
+MODEL_ARGS=()
+if [[ -n "${CODEX_MODEL_COMMIT:-}" ]]; then
+  MODEL_ARGS+=(--model "$CODEX_MODEL_COMMIT")
+elif [[ -n "${CODEX_MODEL_DEFAULT:-}" ]]; then
+  MODEL_ARGS+=(--model "$CODEX_MODEL_DEFAULT")
+fi
 
 log() { echo "[$(date -Iseconds)] $*"; }
 log_err() { echo "[$(date -Iseconds)] $*" >&2; }
@@ -57,4 +63,4 @@ $STATUS
 EOF
 )
 
-"$SCRIPT_DIR/codex-run.sh" --dangerously-bypass-approvals-and-sandbox exec "$PROMPT"
+"$SCRIPT_DIR/codex-run.sh" "${MODEL_ARGS[@]}" --dangerously-bypass-approvals-and-sandbox exec "$PROMPT"

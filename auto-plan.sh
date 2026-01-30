@@ -41,6 +41,13 @@ fi
 
 GIT_STATUS=$(git status --porcelain || true)
 
+MODEL_ARGS_PLAN=()
+if [[ -n "${CODEX_MODEL_PLAN:-}" ]]; then
+  MODEL_ARGS_PLAN+=(--model "$CODEX_MODEL_PLAN")
+elif [[ -n "${CODEX_MODEL_DEFAULT:-}" ]]; then
+  MODEL_ARGS_PLAN+=(--model "$CODEX_MODEL_DEFAULT")
+fi
+
 CONTEXT_RAW=""
 if [[ -n "${PLAN_CONTEXT_FILES:-}" ]]; then
   IFS=',' read -r -a CONTEXT_FILE_LIST <<< "$PLAN_CONTEXT_FILES"
@@ -78,7 +85,7 @@ EOF
 )
 
   SUMMARY_TMP="$(mktemp)"
-  "$SCRIPT_DIR/codex-run.sh" exec "$SUMMARY_PROMPT" > "$SUMMARY_TMP"
+  "$SCRIPT_DIR/codex-run.sh" "${MODEL_ARGS_PLAN[@]}" exec "$SUMMARY_PROMPT" > "$SUMMARY_TMP"
   CONTEXT_SUMMARY="$(cat "$SUMMARY_TMP")"
   rm -f "$SUMMARY_TMP"
 fi
@@ -116,7 +123,7 @@ EOF
 )
 
 TMP_OUT="$(mktemp)"
-"$SCRIPT_DIR/codex-run.sh" exec "$PROMPT" > "$TMP_OUT"
+"$SCRIPT_DIR/codex-run.sh" "${MODEL_ARGS_PLAN[@]}" exec "$PROMPT" > "$TMP_OUT"
 
 if ! head -n 1 "$TMP_OUT" | grep -iq "^# plan"; then
   log_err "Codex output did not start with the expected header. $(basename "$PLAN_FILE") not updated."

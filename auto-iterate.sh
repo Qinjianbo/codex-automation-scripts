@@ -52,7 +52,14 @@ EOF
 )
 
 TMP_OUT="$(mktemp)"
-"$SCRIPT_DIR/codex-run.sh" exec "$PROMPT" > "$TMP_OUT"
+MODEL_ARGS=()
+if [[ -n "${CODEX_MODEL_ITERATE:-}" ]]; then
+  MODEL_ARGS+=(--model "$CODEX_MODEL_ITERATE")
+elif [[ -n "${CODEX_MODEL_DEFAULT:-}" ]]; then
+  MODEL_ARGS+=(--model "$CODEX_MODEL_DEFAULT")
+fi
+
+"$SCRIPT_DIR/codex-run.sh" "${MODEL_ARGS[@]}" exec "$PROMPT" > "$TMP_OUT"
 
 FIRST_LINE="$(head -n 1 "$TMP_OUT" || true)"
 if [[ "$FIRST_LINE" != "已无计划可以进行" ]] && ! grep -q "^# Tasks (Auto-generated)" <<<"$FIRST_LINE"; then

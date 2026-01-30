@@ -54,6 +54,11 @@ load_config() {
   PROJECT_NAME="${PROJECT_NAME:-$(basename "$ROOT_DIR")}"
   CODEX_NODE="${CODEX_NODE:-$HOME/.nvm/versions/node/v22.18.0/bin/node}"
   CODEX_CLI="${CODEX_CLI:-$HOME/.nvm/versions/node/v22.18.0/lib/node_modules/@openai/codex/bin/codex.js}"
+  CODEX_MODEL_DEFAULT="${CODEX_MODEL_DEFAULT:-}"
+  CODEX_MODEL_ITERATE="${CODEX_MODEL_ITERATE:-}"
+  CODEX_MODEL_PLAN="${CODEX_MODEL_PLAN:-}"
+  CODEX_MODEL_EXEC="${CODEX_MODEL_EXEC:-}"
+  CODEX_MODEL_COMMIT="${CODEX_MODEL_COMMIT:-}"
   GIT_BRANCH="${GIT_BRANCH:-main}"
   GIT_REMOTE="${GIT_REMOTE:-origin}"
   TASKS_FILE="${TASKS_FILE:-$ROOT_DIR/TASKS.md}"
@@ -88,6 +93,11 @@ load_config() {
       case "$key" in
         codex_node) CODEX_NODE="$val" ;;
         codex_cli) CODEX_CLI="$val" ;;
+        codex_model_default) CODEX_MODEL_DEFAULT="$val" ;;
+        codex_model_iterate) CODEX_MODEL_ITERATE="$val" ;;
+        codex_model_plan) CODEX_MODEL_PLAN="$val" ;;
+        codex_model_exec) CODEX_MODEL_EXEC="$val" ;;
+        codex_model_commit) CODEX_MODEL_COMMIT="$val" ;;
         project_name) PROJECT_NAME="$val" ;;
         git_branch) GIT_BRANCH="$val" ;;
         git_remote) GIT_REMOTE="$val" ;;
