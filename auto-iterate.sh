@@ -9,12 +9,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 load_config
 DATE_STR="$(date +%Y-%m-%d)"
+TIMESTAMP="$(date -Iseconds)"
 LANG_NOTE="Use $CODEX_LANGUAGE for all prose. Keep required headings exactly as specified."
 
 cd "$ROOT_DIR"
 
+log() { echo "[$(date -Iseconds)] $*"; }
+log_err() { echo "[$(date -Iseconds)] $*" >&2; }
+
 if [[ "${1:-}" != "--codex" ]]; then
-  echo "Usage: auto-iterate.sh --codex" >&2
+  log_err "Usage: auto-iterate.sh --codex"
   exit 1
 fi
 
@@ -52,7 +56,7 @@ TMP_OUT="$(mktemp)"
 
 FIRST_LINE="$(head -n 1 "$TMP_OUT" || true)"
 if [[ "$FIRST_LINE" != "已无计划可以进行" ]] && ! grep -q "^# Tasks (Auto-generated)" <<<"$FIRST_LINE"; then
-  echo "Codex output did not start with the expected header or the 'no plan' message. $(basename "$TASKS_FILE") not updated." >&2
+  log_err "Codex output did not start with the expected header or the 'no plan' message. $(basename "$TASKS_FILE") not updated."
   cat "$TMP_OUT" >&2
   rm -f "$TMP_OUT"
   exit 1
@@ -70,8 +74,8 @@ EOF
 
 cat >> "$LOG_FILE" <<EOF
 ## $DATE_STR
-- Generated $(basename "$TASKS_FILE") via Codex.
+- [$TIMESTAMP] Generated $(basename "$TASKS_FILE") via Codex.
 EOF
 
-echo "Updated: $TASKS_FILE"
-echo "Updated: $LOG_FILE"
+log "Updated: $TASKS_FILE"
+log "Updated: $LOG_FILE"

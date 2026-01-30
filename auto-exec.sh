@@ -13,6 +13,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 load_config
 
+log() { echo "[$(date -Iseconds)] $*"; }
+log_err() { echo "[$(date -Iseconds)] $*" >&2; }
+
 ALLOW_DIRTY="false"
 DRY_RUN="false"
 SANDBOX_MODE="$DEFAULT_SANDBOX"
@@ -30,20 +33,20 @@ for arg in "$@"; do
     --full-auto)
       FULL_AUTO="true"
       ;;
-    *) echo "Unknown option: $arg" >&2; exit 1 ;;
+    *) log_err "Unknown option: $arg"; exit 1 ;;
   esac
 done
 
 cd "$ROOT_DIR"
 
 if [[ ! -f "$TASKS_FILE" ]]; then
-  echo "Missing tasks file: $TASKS_FILE. Run \"$SCRIPT_DIR/auto-iterate.sh\" --codex first." >&2
+  log_err "Missing tasks file: $TASKS_FILE. Run \"$SCRIPT_DIR/auto-iterate.sh\" --codex first."
   exit 1
 fi
 
 if [[ "$ALLOW_DIRTY" == "false" ]]; then
   if git status --porcelain | grep -q .; then
-    echo "Working tree is not clean. Commit/stash or re-run with --allow-dirty." >&2
+    log_err "Working tree is not clean. Commit/stash or re-run with --allow-dirty."
     exit 1
   fi
 fi
@@ -87,7 +90,8 @@ EOF
 fi
 
 DATE_STR="$(date +%Y-%m-%d)"
+TIMESTAMP="$(date -Iseconds)"
 cat >> "$LOG_FILE" <<EOF
 ## $DATE_STR
-- Ran auto-exec via Codex (dry-run: $DRY_RUN, allow-dirty: $ALLOW_DIRTY).
+- [$TIMESTAMP] Ran auto-exec via Codex (dry-run: $DRY_RUN, allow-dirty: $ALLOW_DIRTY).
 EOF

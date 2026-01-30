@@ -9,12 +9,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 load_config
 DATE_STR="$(date +%Y-%m-%d)"
+TIMESTAMP="$(date -Iseconds)"
 LANG_NOTE="Use $CODEX_LANGUAGE for all prose. Keep required headings exactly as specified."
 
 cd "$ROOT_DIR"
 
+log() { echo "[$(date -Iseconds)] $*"; }
+log_err() { echo "[$(date -Iseconds)] $*" >&2; }
+
 if [[ "${1:-}" != "--codex" ]]; then
-  echo "Usage: auto-plan.sh --codex" >&2
+  log_err "Usage: auto-plan.sh --codex"
   exit 1
 fi
 
@@ -115,7 +119,7 @@ TMP_OUT="$(mktemp)"
 "$SCRIPT_DIR/codex-run.sh" exec "$PROMPT" > "$TMP_OUT"
 
 if ! head -n 1 "$TMP_OUT" | grep -iq "^# plan"; then
-  echo "Codex output did not start with the expected header. $(basename "$PLAN_FILE") not updated." >&2
+  log_err "Codex output did not start with the expected header. $(basename "$PLAN_FILE") not updated."
   cat "$TMP_OUT" >&2
   rm -f "$TMP_OUT"
   exit 1
@@ -133,8 +137,8 @@ fi
 
 cat >> "$LOG_FILE" <<EOF
 ## $DATE_STR
-- Generated $(basename "$PLAN_FILE") via Codex.
+- [$TIMESTAMP] Generated $(basename "$PLAN_FILE") via Codex.
 EOF
 
-echo "Updated: $PLAN_FILE"
-echo "Updated: $LOG_FILE"
+log "Updated: $PLAN_FILE"
+log "Updated: $LOG_FILE"

@@ -12,23 +12,26 @@ load_config
 cd "$ROOT_DIR"
 LANG_NOTE="Use $CODEX_LANGUAGE for all responses."
 
+log() { echo "[$(date -Iseconds)] $*"; }
+log_err() { echo "[$(date -Iseconds)] $*" >&2; }
+
 COMMIT_MSG=""
 while getopts ":m:" opt; do
   case "$opt" in
     m) COMMIT_MSG="$OPTARG" ;;
-    *) echo "Usage: auto-commit.sh [-m \"message\"]" >&2; exit 1 ;;
+    *) log_err "Usage: auto-commit.sh [-m \"message\"]"; exit 1 ;;
   esac
 done
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 if [[ "$BRANCH" != "$GIT_BRANCH" ]]; then
-  echo "Not on $GIT_BRANCH (current: $BRANCH). Aborting." >&2
+  log_err "Not on $GIT_BRANCH (current: $BRANCH). Aborting."
   exit 1
 fi
 
 STATUS="$(git status --porcelain)"
 if [[ -z "$STATUS" ]]; then
-  echo "No changes to commit." >&2
+  log_err "No changes to commit."
   exit 0
 fi
 

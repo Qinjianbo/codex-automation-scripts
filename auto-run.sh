@@ -15,6 +15,12 @@ source "$SCRIPT_DIR/config.sh"
 load_config
 cd "$ROOT_DIR"
 
+log() { echo "[$(date -Iseconds)] $*"; }
+log_err() { echo "[$(date -Iseconds)] $*" >&2; }
+
+DATE_STR="$(date +%Y-%m-%d)"
+TIMESTAMP="$(date -Iseconds)"
+
 ALLOW_DIRTY="false"
 DRY_RUN="false"
 FULL_AUTO="false"
@@ -28,7 +34,7 @@ for arg in "$@"; do
     --full-auto) FULL_AUTO="true" ;;
     --force-lock) FORCE_LOCK="true" ;;
     --skip-commit) SKIP_COMMIT="true" ;;
-    *) echo "Unknown option: $arg" >&2; exit 1 ;;
+    *) log_err "Unknown option: $arg"; exit 1 ;;
   esac
 done
 
@@ -39,16 +45,16 @@ fi
 if ( set -o noclobber; echo "pid=$$" > "$LOCK_FILE" ) 2>/dev/null; then
   echo "started=$(date -Iseconds)" >> "$LOCK_FILE"
 else
-  echo "auto-run is already running (lock file exists): $LOCK_FILE" >&2
-  echo "Use --force-lock to override if you are sure it's stale." >&2
+  log_err "auto-run is already running (lock file exists): $LOCK_FILE"
+  log_err "Use --force-lock to override if you are sure it's stale."
   exit 1
 fi
 trap 'rm -f "$LOCK_FILE"' EXIT
 
-echo "[1/3] Generate $(basename "$TASKS_FILE") via Codex..."
+log "[1/3] Generate $(basename "$TASKS_FILE") via Codex..."
 "$SCRIPT_DIR/auto-iterate.sh" --codex
 
-echo "[2/3] Execute tasks via Codex..."
+log "[2/3] Execute tasks via Codex..."
 EXEC_ARGS=""
 if [[ "$ALLOW_DIRTY" == "true" ]]; then
   EXEC_ARGS+=" --allow-dirty"
@@ -67,9 +73,33 @@ else
 fi
 
 if [[ "$DRY_RUN" == "true" || "$SKIP_COMMIT" == "true" ]]; then
-  echo "[3/3] Commit skipped."
+  log "[3/3] Commit skipped."
+
+  if [[ ! -f "$LOG_FILE" ]]; then
+    cat > "$LOG_FILE" <<EOF
+# Iteration Log
+
+EOF
+  fi
+
+  cat >> "$LOG_FILE" <<EOF
+## $DATE_STR
+- [$TIMESTAMP] Ran auto-run (allow-dirty: $ALLOW_DIRTY, dry-run: $DRY_RUN, full-auto: $FULL_AUTO, skip-commit: $SKIP_COMMIT, force-lock: $FORCE_LOCK).
+EOF
   exit 0
 fi
 
-echo "[3/3] Commit and push via Codex..."
+log "[3/3] Commit and push via Codex..."
 "$SCRIPT_DIR/auto-commit.sh"
+
+if [[ ! -f "$LOG_FILE" ]]; then
+  cat > "$LOG_FILE" <<EOF
+# Iteration Log
+
+EOF
+fi
+
+cat >> "$LOG_FILE" <<EOF
+## $DATE_STR
+- [$TIMESTAMP] Ran auto-run (allow-dirty: $ALLOW_DIRTY, dry-run: $DRY_RUN, full-auto: $FULL_AUTO, skip-commit: $SKIP_COMMIT, force-lock: $FORCE_LOCK).
+EOF
